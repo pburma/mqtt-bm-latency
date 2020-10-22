@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 	"strconv"
+	"encoding/json"
 )
 
 import (
@@ -23,10 +24,17 @@ type SubClient struct {
 	Quiet      bool
 }
 
+type JSONResponse struct {
+	Message     string     `json:"msg"`
+	Timestamp	string	`json:"timestamp"`
+
+}
+
 func (c *SubClient) run(res chan *SubResults, subDone chan bool, jobDone chan bool,) {
+	var jsonResponse JSONResponse
 	runResults := new(SubResults)
 	runResults.ID = c.ID
-	
+
 	forwardLatency := []float64{}
 
 	ka, _ := time.ParseDuration(strconv.Itoa(c.KeepAlive) + "s")
@@ -39,8 +47,13 @@ func (c *SubClient) run(res chan *SubResults, subDone chan bool, jobDone chan bo
 		SetKeepAlive(ka).
 		SetDefaultPublishHandler(func(client mqtt.Client, msg mqtt.Message) {
 		recvTime := time.Now().UnixNano()
-		payload := msg.Payload()
+		err := json.Unmarshal([]byte(msg.Payload()), &jsonResponse)
+		payload := jsonResponse.Message + "#@#1234567890"
+		//log.Printf("Msg payload %v\n", payload)
 		i := 0
+		if err != nil {
+			fmt.Println(err)
+		}
 		for ; i<len(payload)-3; i++ {
 			if payload[i]=='#' && payload[i+1]=='@' && payload[i+2]=='#' {
 				sendTime,_ := strconv.ParseInt(string(payload[:i]), 10, 64)

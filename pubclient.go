@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"time"
-	"bytes"
+	//"bytes"
 	"strconv"
+	//"encoding/json"
 )
 
 import (
@@ -89,7 +90,9 @@ func (c *PubClient) pubMessages(in, out chan *Message, doneGen, donePub chan boo
 			select {
 			case m := <-in:
 				m.Sent = time.Now()
-				m.Payload = bytes.Join([][]byte{[]byte(strconv.FormatInt(m.Sent.UnixNano(), 10)), make([]byte, c.MsgSize)}, []byte("#@#"))
+				//m.Payload = bytes.Join([][]byte{[]byte(strconv.FormatInt(m.Sent.UnixNano(), 10)), make([]byte, c.MsgSize)}, []byte("#@#"))
+				//m.Payload = `{"test":"testfrom performance"}`
+				m.Payload = strconv.FormatInt(m.Sent.UnixNano(), 10)
 				token := client.Publish(m.Topic, m.QoS, false, m.Payload)
 				token.Wait()
 				if token.Error() != nil {

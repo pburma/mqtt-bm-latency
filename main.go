@@ -85,7 +85,7 @@ func main() {
 
 	var (
 		broker      = flag.String("broker", "tcp://localhost:1883", "MQTT broker endpoint as scheme://host:port")
-		topic       = flag.String("topic", "/test", "MQTT topic for outgoing messages")
+		//topic       = flag.String("topic", "/test", "MQTT topic for outgoing messages")
 		username    = flag.String("username", "", "MQTT username (empty if auth disabled)")
 		password    = flag.String("password", "", "MQTT password (empty if auth disabled)")
 		pubqos      = flag.Int("pubqos", 1, "QoS for published messages")
@@ -120,7 +120,8 @@ func main() {
 			BrokerURL:  *broker,
 			BrokerUser: *username,
 			BrokerPass: *password,
-			SubTopic:   *topic + "-" + strconv.Itoa(i),
+			//SubTopic:   *topic + "-" + strconv.Itoa(i),
+			SubTopic:   "/perfout-" + strconv.Itoa(i),
 			SubQoS:     byte(*subqos),
 			KeepAlive:  *keepalive,
 			Quiet:      *quiet,
@@ -154,7 +155,8 @@ func main() {
 			BrokerURL:  *broker,
 			BrokerUser: *username,
 			BrokerPass: *password,
-			PubTopic:   *topic + "-" + strconv.Itoa(i),
+			//PubTopic:   *topic + "-" + strconv.Itoa(i),
+			PubTopic:   "/perfin-" + strconv.Itoa(i),
 			MsgSize:    *size,
 			MsgCount:   *count,
 			PubQoS:     byte(*pubqos),
