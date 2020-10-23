@@ -1,17 +1,35 @@
 MQTT broker latency measure tool
 =========
 
-Installation. 
+Installation.
+```
 Clone repo and cd into directory
 go get github.com\eclipse\paho.mqtt.golang
 go get github.com\GaryBoone\GoStats
 go build
 ./mqtt-bm-latency --broker tcp://192.168.2.56:1883/ --count 10 --size 1500 --clients 1 --subqos 1 --pubqos 1 --format text --keepalive 240
+```
+Pub topic prefix is /perfin-N <br>
+Sub topic prefix is /perfout-N <br>
 
-Pub topic prefix is /perfin-N
-Sub topic prefix is /perfout-N
+N is the number of clients starting from 0 so the above command will use /perfin-0 and /perfout-0 as the topics. <br>
 
-N is the number of clients starting from 0 so the above command will use /perfin-0 and /perfout-0 as the topics.
+Make sure to set the Quota in the Vantiq ORG settings. 
+```
+{
+  "rates": {
+    "execution": 60010,
+    "receiveMessage": 60000  },
+  "credit": {
+    "default": {
+      "percentage": 100,
+      "queueRatio": 10     }
+  },
+  "limits": {
+    "reservedGroups": 400000
+  }
+}
+```
 ```
 go get github.com/hui6075/mqtt-bm-latency
 ```
