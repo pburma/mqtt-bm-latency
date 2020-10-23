@@ -1,0 +1,41 @@
+version: '3.5'
+services:
+  vantiq_edge_mosquitto:
+    image: eclipse-mosquitto:latest
+    ports:
+    - 1883:1883
+    restart: unless-stopped
+    networks:
+      vantiq-edge:
+        aliases: []
+  vantiq-edge:
+    image: vantiq/vantiq-edge:1.29-SNAPSHOT
+    depends_on:
+    - vantiq_edge_mongo
+    ports:
+    - 8080:8080
+    restart: unless-stopped
+    volumes:
+    - ./public.pem:/opt/vantiq/config/public.pem
+    - ./license.key:/opt/vantiq/config/license.key
+    networks:
+      vantiq-edge:
+        aliases: []
+  vantiq_edge_mongo:
+    image: bitnami/mongodb:4.0.3
+    restart: unless-stopped
+    environment:
+    - MONGODB_USERNAME=ars
+    - MONGODB_PASSWORD=ars
+    - MONGODB_DATABASE=ars02
+    volumes:
+    - vantiq_edge_data:/bitnami:rw
+    networks:
+      vantiq-edge:
+        aliases: []
+networks:
+  vantiq-edge:
+    ipam:
+      config: []
+volumes:
+  vantiq_edge_data: {}
