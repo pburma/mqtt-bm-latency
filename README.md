@@ -1,4 +1,4 @@
-MQTT broker latency measure tool
+MQTT broker latency measure tool - Modified to use different topics for publish and subscribe
 =========
 
 Installation.
