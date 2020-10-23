@@ -1,6 +1,17 @@
 MQTT broker latency measure tool
 =========
 
+Installation. 
+Clone repo and cd into directory
+go get github.com\eclipse\paho.mqtt.golang
+go get github.com\GaryBoone\GoStats
+go build
+./mqtt-bm-latency --broker tcp://192.168.2.56:1883/ --count 10 --size 1500 --clients 1 --subqos 1 --pubqos 1 --format text --keepalive 240
+
+Pub topic prefix is /perfin-N
+Sub topic prefix is /perfout-N
+
+N is the number of clients starting from 0 so the above command will use /perfin-0 and /perfout-0 as the topics.
 ```
 go get github.com/hui6075/mqtt-bm-latency
 ```
